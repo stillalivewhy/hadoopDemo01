@@ -1,4 +1,4 @@
-package com.xmx.hadoop.mapreduce.demo03;
+package com.xmx.hadoop.mapreduce.comparable;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -19,14 +19,17 @@ public class FlowDriver {
         job.setMapperClass(FlowMapper.class);
         job.setReducerClass(FlowReducer.class);
 
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(FlowBean.class);
+        job.setMapOutputKeyClass(FlowBean.class);
+        job.setMapOutputValueClass(Text.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FlowBean.class);
-        job.setNumReduceTasks(1);
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        job.setPartitionerClass(CustomPartitioner.class);
+        job.setNumReduceTasks(5);
+
+        FileInputFormat.setInputPaths(job, new Path("E:\\test\\output0000\\part-r-00000"));
+        FileOutputFormat.setOutputPath(job, new Path("E:\\test\\output222"));
 
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);

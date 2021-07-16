@@ -1,4 +1,4 @@
-package com.xmx.hadoop.mapreduce.demo03;
+package com.xmx.hadoop.mapreduce.partitioner;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -15,6 +15,9 @@ public class FlowDriver {
         Job job = Job.getInstance(conf);
 
         job.setJarByClass(FlowDriver.class);
+        //设置分区
+        job.setPartitionerClass(CustomPartitioner.class);
+        job.setNumReduceTasks(5);
 
         job.setMapperClass(FlowMapper.class);
         job.setReducerClass(FlowReducer.class);
@@ -24,9 +27,11 @@ public class FlowDriver {
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FlowBean.class);
-        job.setNumReduceTasks(1);
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+
+
+        FileInputFormat.setInputPaths(job, new Path("E:\\大数据\\资料\\11_input\\inputflow"));
+        FileOutputFormat.setOutputPath(job, new Path("E:\\test\\output0000"));
 
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);

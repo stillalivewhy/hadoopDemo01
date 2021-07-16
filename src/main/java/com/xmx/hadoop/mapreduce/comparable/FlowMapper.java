@@ -1,4 +1,4 @@
-package com.xmx.hadoop.mapreduce.demo03;
+package com.xmx.hadoop.mapreduce.comparable;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -6,7 +6,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
-public class FlowMapper extends Mapper<LongWritable, Text, Text, FlowBean> {
+public class FlowMapper extends Mapper<LongWritable, Text, FlowBean, Text> {
 
     Text k = new Text();
 
@@ -17,9 +17,9 @@ public class FlowMapper extends Mapper<LongWritable, Text, Text, FlowBean> {
         String str = value.toString();
         String[] values = str.split("\t");
         k.set(values[0]);
-        v.setUpFlow(Long.parseLong(values[values.length - 3]));
-        v.setDownFlow(Long.parseLong(values[values.length - 2]));
+        v.setUpFlow(Long.parseLong(values[1]));
+        v.setDownFlow(Long.parseLong(values[2]));
         v.setSumFlow();
-        context.write(k, v);
+        context.write(v, k);
     }
 }
